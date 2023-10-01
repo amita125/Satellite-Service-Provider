@@ -1,0 +1,1 @@
+export const fetchGateways = jest.fn().mockResolvedValue("ok");
