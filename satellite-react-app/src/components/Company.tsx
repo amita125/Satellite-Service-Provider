@@ -13,15 +13,17 @@ const Company = () => {
   const [isValidating, setIsValidating] = useState(false);
   const role = localStorage.getItem("role");
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
-  const [editCompanyInfo, setEditCompanyInfo] = useState<CompanyInfo>();
   const [isLoading, setIsLoading] = useState(false);
   const authToken = localStorage.getItem("authToken");
-
+  const [selectedCompany, setSelectedCompany] = useState<CompanyInfo>();
+  
   const showEditModal = (company: CompanyInfo) => {
-    setEditCompanyInfo(company);
+    console.log(company);
+    setSelectedCompany(company);
     setIsEditModalVisible(true);
   };
 
+  
   const fetchCompanys = async () => {
     setIsValidating(true);
 
@@ -88,7 +90,6 @@ const Company = () => {
   };
 
   const handleEdit = async (values: any) => {
-    console.log(values);
 
     try {
       const response = await fetch(
@@ -105,6 +106,7 @@ const Company = () => {
 
       if (response.ok) {
         setIsEditModalVisible(false);
+        setSelectedCompany(undefined)
         fetchCompanys(); // Re-fetch data after successful edit
       } else {
         throw new Error("Error creating company");
@@ -161,7 +163,7 @@ const Company = () => {
         <Table
           dataSource={companys}
           loading={isValidating}
-          rowKey="id"
+          rowKey={(record) => record.id.toString()}
           size="small"
           style={{ width: "100%" }}
           columns={columns}
@@ -174,10 +176,15 @@ const Company = () => {
       <Modal
         title="Edit Company"
         open={isEditModalVisible}
-        onCancel={() => setIsEditModalVisible(false)}
+        onCancel={() => {
+          setIsEditModalVisible(false);
+          setSelectedCompany(undefined); // Reset selected company state
+        }}
+        destroyOnClose={true}
+        maskClosable={false}
         footer={null}
       >
-        <Form initialValues={editCompanyInfo} onFinish={handleEdit}>
+        <Form initialValues={selectedCompany} onFinish={handleEdit}>
         <Form.Item label="Company Id" name="id">
             <Input disabled />
           </Form.Item>

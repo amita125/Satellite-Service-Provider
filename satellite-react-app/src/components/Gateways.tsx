@@ -20,7 +20,7 @@ const Gateways = () => {
   const role = localStorage.getItem("role");
 
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
-  const [editGatewayInfo, setEditGatewayInfo] = useState<GatewayInfo>();
+  const [selectedGatewayInfo, setSelectedGatewayInfo] = useState<GatewayInfo>();
   const authToken = localStorage.getItem("authToken");
 
   const fetchGateways = async () => {
@@ -81,7 +81,7 @@ const Gateways = () => {
   };
 
   const showEditModal = (gateway: GatewayInfo) => {
-    setEditGatewayInfo(gateway);
+    setSelectedGatewayInfo(gateway);
     setIsEditModalVisible(true);
   };
 
@@ -103,6 +103,7 @@ const Gateways = () => {
 
       if (response.ok) {
         setIsEditModalVisible(false);
+        setSelectedGatewayInfo(undefined);
         fetchGateways(); // Re-fetch data after successful edit
       } else {
         throw new Error("Error creating gateway");
@@ -164,7 +165,7 @@ const Gateways = () => {
         <Table
           dataSource={gateways}
           loading={isValidating}
-          rowKey="id"
+          rowKey={(record) => record.id.toString()}
           size="small"
           style={{ width: "100%" }}
           columns={columns}
@@ -176,10 +177,15 @@ const Gateways = () => {
       <Modal
         title="Edit Gateway Details"
         open={isEditModalVisible}
-        onCancel={() => setIsEditModalVisible(false)}
+        onCancel={() => {
+          setIsEditModalVisible(false);
+          setSelectedGatewayInfo(undefined);
+        }}
+        destroyOnClose={true}
+        maskClosable={false}
         footer={null}
       >
-        <Form initialValues={editGatewayInfo} onFinish={handleEdit}>
+        <Form initialValues={selectedGatewayInfo} onFinish={handleEdit}>
           <Form.Item label="Gateway Id" name="id">
             <Input disabled />
           </Form.Item>

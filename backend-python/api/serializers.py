@@ -21,9 +21,10 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         return user
 
 class GatewaySerializer(serializers.ModelSerializer):
+    company_name = serializers.ReadOnlyField(source='company.name') 
     class Meta:
         model = Gateway
-        fields = ['company', 'gateway_name', 'antenna_diameter', 'location_name', 'latitude', 'longitude']
+        fields = ['id','company','company_name', 'gateway_name', 'antenna_diameter', 'location_name', 'latitude', 'longitude']
 
     def create(self, validated_data):
         # Check if request and user exist in context
@@ -60,9 +61,13 @@ class UserLoginSerializer(serializers.Serializer):
         return data
 
 class CompanySerializer(serializers.ModelSerializer):
+    total_gateway = serializers.SerializerMethodField()
     class Meta:
         model = Company
-        fields = ['name', 'address', 'id']
+        fields = ['name', 'address', 'id','total_gateway']
+    
+    def get_total_gateway(self, obj):
+        return obj.gateway_set.count()
 
     def create(self, validated_data):
         if 'request' not in self.context or not hasattr(self.context['request'], 'user'):

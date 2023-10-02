@@ -70,6 +70,42 @@ Both the backend and frontend have comprehensive test suites to ensure the funct
 1. Navigate to the `frontend` directory.
 2. Run frontend tests using `npm test`.
 
+
+## Application Overview Screenshot 
+
+### Login page 
+![Login page](image.png)
+
+### Dashboard page with empty gateways
+![Dashboard](image-1.png)
+
+## Operator role View 
+
+### Dashboard page with list of gateways
+![Dashboard with gateway](image-2.png)
+### Company page 
+![Cmpany page](image-3.png)
+
+## Administrator role View 
+
+### Dashboard page 
+![Admin dashboard](image-4.png)
+### Update Gateway 
+![edit gateway](image-5.png)
+### Company page
+![company page](image-6.png) 
+### Update Company
+![edit company](image-7.png)
+### Admin page 
+![admin page](image-8.png)
+### Create new user modal
+![user modal](image-9.png) 
+### Create new company modal
+![company modal](image-10.png) 
+### Create new gateway modal 
+![gateway modal](image-11.png)
+
+
 ## Improvement for future use 
 
 1. Testing needs improvement to support integration f the application, frontend and backend. 
